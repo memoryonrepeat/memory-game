@@ -1,5 +1,5 @@
 var API_PATH = __dirname+"/api/goal.js";
-var SIZE = 10; // Configurable
+var SIZE = 4; // Configurable
 
 var fs = require('fs');
 
@@ -38,15 +38,35 @@ function initializeBoard(){
 		var square_index = Math.floor(Math.random() * square_pot.length);
 		board[square_pot[square_index]] = [goal_pot[goal_index], 'en'];
 
+		// console.log(square_pot[square_index], goal_pot[goal_index]);
+
 		square_pot.splice(square_index,1);
 
 		square_index = Math.floor(Math.random() * square_pot.length);
 		board[square_pot[square_index]] = [goal_pot[goal_index], 'ja'];
 
+		// console.log(square_pot[square_index], goal_pot[goal_index]);
+
 		square_pot.splice(square_index,1);
 		goal_pot.splice(goal_index,1);
 	}
+	console.log(board);
 	return board;
+}
+
+// Map the initialized board states to goals provided by API
+function mapBoardGoals(board, goals){
+	// console.log(goals);
+	for (var key in board){
+		// console.log(board[key]);
+		if (board[key][1]=='en'){
+			board[key] = goals[board[key][0]].item.cue;
+		}
+		else{
+			board[key] = goals[board[key][0]].item.response;
+		}
+	}
+	return board
 }
 
 function getRandomInt(max) {
@@ -59,4 +79,7 @@ var goals = transformData(parseDB().goal_items);
 
 // console.log(getRandomInt(100));
 
-console.log(initializeBoard());
+// console.log(initializeBoard());
+
+console.log(mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items)));
+
