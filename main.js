@@ -52,7 +52,7 @@ function initializeBoard(){
 	}
 	console.log(board);
 	return board;
-}
+};
 
 // Map the initialized board states to goals provided by API
 function mapBoardGoals(board, goals){
@@ -67,11 +67,11 @@ function mapBoardGoals(board, goals){
 		}
 	}
 	return board
-}
+};
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
-}
+};
 
 var goals = transformData(parseDB().goal_items);
 

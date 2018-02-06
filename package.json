@@ -1,0 +1,22 @@
+{
+  "name": "thanh_nguyen_project",
+  "version": "0.0.1",
+  "description": "We would like you to create a memory game (similar to the one pictured below), where cards are flipped over to find pairs of corresponding words in Japanese and English with the same meaning.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iknow/thanh_nguyen_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iknow/thanh_nguyen_project/issues"
+  },
+  "homepage": "https://github.com/iknow/thanh_nguyen_project#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
