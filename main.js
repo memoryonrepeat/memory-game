@@ -60,10 +60,10 @@ function mapBoardGoals(board, goals){
 	for (var key in board){
 		// console.log(board[key]);
 		if (board[key][1]=='en'){
-			board[key] = goals[board[key][0]].item.cue;
+			board[key] = [goals[board[key][0]].item.cue, board[key]];
 		}
 		else{
-			board[key] = goals[board[key][0]].item.response;
+			board[key] = [goals[board[key][0]].item.response, board[key]];
 		}
 	}
 	return board
