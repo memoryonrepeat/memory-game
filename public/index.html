@@ -17,13 +17,29 @@
 
   <div class="primary-content inner-container">
     <!-- Put inner content here -->
+    <ul class="board">
+      
+    </ul>
+  </div>
   <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
-      console.log(mapBoardGoals(initializeBoard(),transformData(data.goal_items)));
+      var board = mapBoardGoals(initializeBoard(),transformData(data.goal_items));
+      renderBoard(board);
     });
+
+    function renderBoard(board){
+      for (var key in board){
+        if (key%board.size == 0){
+          $(".board").append('<br>');
+        }
+        if (key != 'size'){
+          console.log(board[key][0], key);
+          $(".board").append('<li class="square">'+board[key][0].text+'</li>');
+        }
+      }
+    };
   </script>
-  </div>
 </body>
 </html>

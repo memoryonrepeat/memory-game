@@ -57,7 +57,8 @@ function mapBoardGoals(board, goals){
 			board[key] = [goals[board[key][0]].item.response, board[key]];
 		}
 	}
-	return board
+	board.size = SIZE;
+	return board;
 };
 
 function getRandomInt(max) {
