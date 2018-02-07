@@ -1,12 +1,4 @@
-var API_PATH = __dirname+"/api/goal.js";
-var SIZE = 4; // Configurable
-
-var fs = require('fs');
-
-// Parse DB and hold its info in an object
-function parseDB() {
-	return JSON.parse(fs.readFileSync(API_PATH, 'utf8'));
-}
+var SIZE = 4;
 
 // Assign an index number to each goal for faster reference during randomization
 function transformData(goal_items){
@@ -50,7 +42,6 @@ function initializeBoard(){
 		square_pot.splice(square_index,1);
 		goal_pot.splice(goal_index,1);
 	}
-	console.log(board);
 	return board;
 };
 
@@ -84,13 +75,4 @@ var board = mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items)
 
 // console.log(mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items)));
 
-const express = require('express')
-const app = express()
-
-app.use(express.static('public'))
-
-app.get('/', (req, res) => res.send('hello world'))
-// app.get('/board', (req, res) => res.json(board))
-
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
 

@@ -18,9 +18,10 @@
   <div class="primary-content inner-container">
     <!-- Put inner content here -->
   <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
-      console.log(data);
+      console.log(mapBoardGoals(initializeBoard(),transformData(data.goal_items)));
     });
   </script>
   </div>
