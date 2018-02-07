@@ -1,4 +1,4 @@
-var SIZE = 4;
+var SIZE = 8;
 
 // Assign an index number to each goal for faster reference during randomization
 function transformData(goal_items){

@@ -31,9 +31,7 @@
 
     function renderBoard(board){
       for (var key in board){
-        if (key%board.size == 0){
-          $(".board").append('<br>');
-        }
+        $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
         if (key != 'size'){
           console.log(board[key][0], key);
           $(".board").append('<li class="square">'+board[key][0].text+'</li>');
