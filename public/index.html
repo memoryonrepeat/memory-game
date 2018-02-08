@@ -20,13 +20,16 @@
     <ul class="board">
       
     </ul>
+
   </div>
   <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="scripts/jquery.flip.min.js"></script>
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
       var board = mapBoardGoals(initializeBoard(),transformData(data.goal_items));
       renderBoard(board);
+      $(".square").flip();
     });
 
     function renderBoard(board){
@@ -34,7 +37,7 @@
         $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
         if (key != 'size'){
           console.log(board[key][0], key);
-          $(".board").append('<li class="square">'+board[key][0].text+'</li>');
+          $(".board").append('<li class="square"><div class="front">'+board[key][0].text+'</div><div class="back">'+board[key][1]+'</div></li>');
         }
       }
     };
