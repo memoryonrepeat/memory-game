@@ -67,18 +67,21 @@ function initializeBoard(size, data){
 };
 
 function getElapsedTime(start){
-	var hours, mins, secs, total;
+	var mins, secs;
   	secs = Math.floor((Date.now() - start) / 1000);
-  	total = secs;
   	mins = Math.floor(secs / 60);
   	secs = secs % 60;
-  	hours = Math.floor(mins / 60);
   	mins = mins % 60;
-  	hours = hours % 24;
   	return { 
-  		hours: hours, 
   		mins: mins, 
-  		secs: secs,
-  		total: total
+  		secs: secs
   	};	
+};
+
+function calculateScore(time, flips, matches){
+	var baseScore = 10000;
+	var flipPenalty = 30;
+	var timePenalty = 10;
+	var matchReward = 200;
+	return baseScore - flips*flipPenalty - time*timePenalty + matches*matchReward;
 };

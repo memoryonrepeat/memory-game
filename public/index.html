@@ -19,6 +19,7 @@
     <!-- Put inner content here -->
     <div id="timer"></div>
     <div id="flipCounter"></div>
+    <div id="score"></div>
     <ul class="board">
       
     </ul>
@@ -29,17 +30,24 @@
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
+
       var board = initializeBoard(8, data.goal_items);
+      var start = Date.now();
+      var elapsedTime = {};
+      var flipCounter = 0;
+      var matches = 0;
+
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
-      var start = Date.now();
-      var elapsedTime = {};
       setInterval(function(){
         elapsedTime = getElapsedTime(start);
-        $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
+        $("#timer").text("Time elapsed: "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
+        // $("#score").text("Score: "+calculateScore(elapsedTime.secs+60*elapsedTime.mins, flipCounter));
       }, 1000);
       $(".square").on('click',function(){
+        flipCounter += 1;
+        $("#flipCounter").text(flipCounter);
         if (!this.matched){
           currentlyFlipped.push(this);
         }
@@ -49,7 +57,8 @@
               currentlyFlipped.forEach(function(card){
                 $(card).off(".flip");
                 card.matched = true;
-              });  
+              });
+              matches += 1;
             }
             currentlyFlipped = [];
           }
@@ -64,6 +73,7 @@
             }, 1000);
           }
         }
+        $("#score").text("Score: "+calculateScore(elapsedTime.secs+60*elapsedTime.mins, flipCounter, matches));
       });
     });
 
