@@ -31,15 +31,41 @@
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
-      $(".square").on('flip:done',function(){
-        $(this).off();
+      $(".square").on('click',function(){
+        if (!this.matched){
+          currentlyFlipped.push(this);
+        }
+        if (currentlyFlipped.length === 2){
+          if (currentlyFlipped[0].id === currentlyFlipped[1].id){
+            if (currentlyFlipped[0].dataset.language !== currentlyFlipped[1].dataset.language){
+              currentlyFlipped.forEach(function(card){
+                $(card).off(".flip");
+                card.matched = true;
+              });
+              currentlyFlipped = [];
+            }
+            else{
+              currentlyFlipped = []; 
+            }
+          }
+          else{ // not match -> flip back
+            setTimeout(function(){
+              currentlyFlipped.forEach(function(card){
+                if (!card.matched){
+                  $(card).flip(false);
+                }
+              });
+              currentlyFlipped = [];
+            }, 1000);
+          }
+        }
       });
     });
 
     function renderBoard(board){
       for (var key in board){
         if (key != 'size'){
-          var square = '<li class="square" id='+board[key][1][0]+'><div class="front">'+board[key][1][0]+'</div><div class="back">'+board[key][0].text+'</div></li>';
+          var square = '<li class="square" id='+board[key][1][0]+' data-language='+board[key][1][1]+'><div class="front">'+board[key][1][0]+'</div><div class="back">'+board[key][0].text+'</div></li>';
           $(".board").append(square);
         }
       };
