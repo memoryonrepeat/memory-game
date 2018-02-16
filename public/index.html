@@ -29,18 +29,22 @@
     $.getJSON( "api/goal.js", function( data ) {
       var board = mapBoardGoals(initializeBoard(),transformData(data.goal_items));
       renderBoard(board);
+      $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
+      $(".square").on('flip:done',function(){
+        $(this).off();
+      });
     });
 
     function renderBoard(board){
       for (var key in board){
-        $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
         if (key != 'size'){
-          console.log(board[key][0], key);
-          $(".board").append('<li class="square"><div class="front">'+board[key][0].text+'</div><div class="back">'+board[key][1]+'</div></li>');
+          var square = '<li class="square" id='+board[key][1][0]+'><div class="front">'+board[key][1][0]+'</div><div class="back">'+board[key][0].text+'</div></li>';
+          $(".board").append(square);
         }
-      }
+      };
     };
+
   </script>
 </body>
 </html>
