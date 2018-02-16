@@ -17,6 +17,8 @@
 
   <div class="primary-content inner-container">
     <!-- Put inner content here -->
+    <div id="timer"></div>
+    <div id="flipCounter"></div>
     <ul class="board">
       
     </ul>
@@ -27,11 +29,16 @@
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
-      // var board = mapBoardGoals(initializeBoard(8),transformData(data.goal_items));
       var board = initializeBoard(8, data.goal_items);
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
+      var start = Date.now();
+      var elapsedTime = {};
+      setInterval(function(){
+        elapsedTime = getElapsedTime(start);
+        $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
+      }, 1000);
       $(".square").on('click',function(){
         if (!this.matched){
           currentlyFlipped.push(this);
