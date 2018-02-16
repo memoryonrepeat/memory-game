@@ -27,7 +27,8 @@
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
     $.getJSON( "api/goal.js", function( data ) {
-      var board = mapBoardGoals(initializeBoard(),transformData(data.goal_items));
+      // var board = mapBoardGoals(initializeBoard(8),transformData(data.goal_items));
+      var board = initializeBoard(8, data.goal_items);
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
@@ -41,12 +42,9 @@
               currentlyFlipped.forEach(function(card){
                 $(card).off(".flip");
                 card.matched = true;
-              });
-              currentlyFlipped = [];
+              });  
             }
-            else{
-              currentlyFlipped = []; 
-            }
+            currentlyFlipped = [];
           }
           else{ // not match -> flip back
             setTimeout(function(){
