@@ -16,14 +16,14 @@
   </header>
 
   <div class="primary-content inner-container">
-    <!-- Put inner content here -->
-    <div id="timer"></div>
-    <div id="flipCounter"></div>
-    <div id="score"></div>
-    <div id="leaderboard"></div>
+    <div class="stats">
+      <div id="timer"></div>
+      <div id="score"></div>
+      <ul class="leaderboard"></ul>
+    </div>
     <ul class="board"></ul>
-
   </div>
+
   <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="scripts/jquery.flip.min.js"></script>
   <script type="text/javascript" src="scripts/main.js"></script>
@@ -35,16 +35,16 @@
       var start = Date.now();
       var board = initializeBoard(size, data.goal_items);
       var elapsedTime = getElapsedTime(start);
+      var currentlyFlipped = [];
       var gameState = {
         flipCounter: 0,
         matches: 0,
         finished: false
-      }
+      };
 
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
-
       updateCurrentScore(start, gameState);
 
       $(".square").on('click',function(){
@@ -89,8 +89,21 @@
       };
     };
 
+    // Real-time score update
+    function updateCurrentScore(start, gameState){
+      var updateLoop = setInterval(function(){
+        if (gameState.finished){
+          updateLeaderboard(elapsedTime, gameState);
+          return clearInterval(updateLoop);
+        }
+        elapsedTime = getElapsedTime(start);
+        $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
+        $("#score").text("Current score: "+calculateScore(elapsedTime.total, gameState.flipCounter));
+      }, 1000);
+    };
+
     function updateLeaderboard(elapsedTime, gameState){
-      var username = prompt('Please enter your name');
+      var username = prompt('Well done! Please enter your name to record the score:') || 'default';
       $.ajax({
         method: "POST",
         url: "/score",
@@ -102,21 +115,26 @@
         }),
         contentType: "application/json",
         success: function(msg) {
-          $("#leaderboard").text("Final score: "+JSON.stringify(msg));
+          generateLeaderboard(msg);
         }
       });
     };
 
-    function updateCurrentScore(start, gameState){
-      var updateLoop = setInterval(function(){
-        if (gameState.finished){
-          updateLeaderboard(elapsedTime, gameState);
-          return clearInterval(updateLoop);
+    function generateLeaderboard(msg){
+      $('#score').text("Final score: "+msg.current);
+      $('.leaderboard').append('<div>Leaderboard</div><br>');
+      for (key in msg){
+        if (key !== "current"){
+          var info = key+': ';
+          for (var i=0; i<msg[key].length; i++){
+            info += '['+msg[key][i]["username"]+' ('+msg[key][i][key]+')'+']';
+            if (i<msg[key].length-1){
+              info += ' >> ';
+            }
+          }
+          $('.leaderboard').append('<li><div>'+info+'</div></li><br>');
         }
-        elapsedTime = getElapsedTime(start);
-        $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
-        $("#score").text("Current score: "+calculateScore(elapsedTime.total, gameState.flipCounter));
-      }, 1000);
+      }
     };
 
   </script>

@@ -1,5 +1,3 @@
-var currentlyFlipped = [];
-
 // Assign an index number to each goal for faster reference during randomization
 function transformData(goal_items){
 	var goals = {};
@@ -30,14 +28,10 @@ function randomizeBoard(size){
 		var square_index = Math.floor(Math.random() * square_pot.length);
 		board[square_pot[square_index]] = [goal_pot[goal_index], 'en'];
 
-		// console.log(square_pot[square_index], goal_pot[goal_index]);
-
 		square_pot.splice(square_index,1);
 
 		square_index = Math.floor(Math.random() * square_pot.length);
 		board[square_pot[square_index]] = [goal_pot[goal_index], 'ja'];
-
-		// console.log(square_pot[square_index], goal_pot[goal_index]);
 
 		square_pot.splice(square_index,1);
 		goal_pot.splice(goal_index,1);
