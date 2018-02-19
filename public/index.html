@@ -31,7 +31,7 @@
 
     $.getJSON( "api/goal.js", function( data ) {
 
-      var size = 2;
+      var size = 4; // Has to be an even number (due to square board) and <=8 (due to database size)
       var start = Date.now();
       var board = initializeBoard(size, data.goal_items);
       var elapsedTime = getElapsedTime(start);
