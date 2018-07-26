@@ -73,7 +73,8 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
-var goals = transformData(parseDB().goal_items);
+/*var goals = transformData(parseDB().goal_items);
+var board = mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items));*/
 
 //console.log(goals);
 
@@ -81,5 +82,15 @@ var goals = transformData(parseDB().goal_items);
 
 // console.log(initializeBoard());
 
-console.log(mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items)));
+// console.log(mapBoardGoals(initializeBoard(), transformData(parseDB().goal_items)));
+
+const express = require('express')
+const app = express()
+
+app.use(express.static('public'))
+
+app.get('/', (req, res) => res.send('hello world'))
+// app.get('/board', (req, res) => res.json(board))
+
+app.listen(3000, () => console.log('Example app listening on port 3000!'))
 

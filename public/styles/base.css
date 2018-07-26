@@ -1,0 +1,23 @@
+@import url(/styles/normalize.css);
+
+.header {
+  background-color: #3F6CCE;
+  box-shadow: 0 0 10px #2C55AE;
+  padding: 15px 10px;
+}
+
+.inner-container {
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.logo-iknow {
+  background: url(/images/logo-iknow.png) 0 0 no-repeat;
+  background-size: contain;
+  width: 110px;
+  height: 60px;
+}
+
+.primary-content {
+  padding: 50px 0;
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>iKnow! Memory Game</title>
+  <meta charset="utf-8" />
+  <link href="images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+  <!-- Styles -->
+  <link href="styles/base.css" media="all" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <header class="header">
+    <div class="inner-container">
+      <div class="logo-iknow"></div>
+    </div>
+  </header>
+
+  <div class="primary-content inner-container">
+    <!-- Put inner content here -->
+  <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript">
+    $.getJSON( "api/goal.js", function( data ) {
+      console.log(data);
+    });
+  </script>
+  </div>
+</body>
+</html>
