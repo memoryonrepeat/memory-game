@@ -67,12 +67,16 @@ function initializeBoard(size, data){
 };
 
 function getElapsedTime(start){
-	var mins, secs;
+	var total, mins, secs, hours;
   	secs = Math.floor((Date.now() - start) / 1000);
+  	total = secs;
   	mins = Math.floor(secs / 60);
   	secs = secs % 60;
+  	hours = Math.floor(mins / 60);
   	mins = mins % 60;
   	return { 
+  		total: total,
+  		hours: hours,
   		mins: mins, 
   		secs: secs
   	};	

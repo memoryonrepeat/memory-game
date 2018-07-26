@@ -20,34 +20,36 @@
     <div id="timer"></div>
     <div id="flipCounter"></div>
     <div id="score"></div>
-    <ul class="board">
-      
-    </ul>
+    <div id="leaderboard"></div>
+    <ul class="board"></ul>
 
   </div>
   <script type="text/javascript" src="scripts/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="scripts/jquery.flip.min.js"></script>
   <script type="text/javascript" src="scripts/main.js"></script>
   <script type="text/javascript">
+
     $.getJSON( "api/goal.js", function( data ) {
 
-      var board = initializeBoard(8, data.goal_items);
+      var size = 4;
       var start = Date.now();
+      var board = initializeBoard(size, data.goal_items);
       var elapsedTime = {};
-      var flipCounter = 0;
-      var matches = 0;
+      var gameState = {
+        flipCounter: 0,
+        matches: 0,
+        finished: false
+      }
 
       renderBoard(board);
       $('.square:nth-child('+board.size+'n)').next().css({'clear': 'both'});
       $(".square").flip();
-      setInterval(function(){
-        elapsedTime = getElapsedTime(start);
-        $("#timer").text("Time elapsed: "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
-        // $("#score").text("Score: "+calculateScore(elapsedTime.secs+60*elapsedTime.mins, flipCounter));
-      }, 1000);
+
+      updateCurrentScore(start, gameState);
+
       $(".square").on('click',function(){
-        flipCounter += 1;
-        $("#flipCounter").text(flipCounter);
+        gameState.flipCounter += 1;
+        $("#flipCounter").text(gameState.flipCounter);
         if (!this.matched){
           currentlyFlipped.push(this);
         }
@@ -58,7 +60,10 @@
                 $(card).off(".flip");
                 card.matched = true;
               });
-              matches += 1;
+              gameState.matches += 1;
+              if (gameState.matches == size*size/2){
+                gameState.finished = true;
+              }
             }
             currentlyFlipped = [];
           }
@@ -73,7 +78,7 @@
             }, 1000);
           }
         }
-        $("#score").text("Score: "+calculateScore(elapsedTime.secs+60*elapsedTime.mins, flipCounter, matches));
+        $("#score").text("Score: "+calculateScore(elapsedTime.total, flipCounter, matches));
       });
     });
 
@@ -84,6 +89,35 @@
           $(".board").append(square);
         }
       };
+    };
+
+    function updateLeaderboard(elapsedTime, flipCounter, matches){
+      $.ajax({
+        method: "POST",
+        url: "/score",
+        data: JSON.stringify({ 
+          score: calculateScore(elapsedTime.total, flipCounter, matches)
+        }),
+        contentType: "application/json",
+        success: function(msg) {
+          $("#leaderboard").text(msg);
+        }
+      });
+    };
+
+    function updateCurrentScore(start, gameState){
+      var updateLoop = setInterval(function(){
+        // console.log('test')
+        if (gameState.finished){
+          console.log('wrong')
+          return clearInterval(updateLoop);
+        }
+        console.log(gameState);
+        elapsedTime = getElapsedTime(start);
+        $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
+        updateLeaderboard(elapsedTime, gameState.flipCounter, gameState.matches);
+        // $("#score").text("Score: "+calculateScore(elapsedTime.total, flipCounter, matches));
+      }, 1000);
     };
 
   </script>
