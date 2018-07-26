@@ -31,7 +31,7 @@
 
     $.getJSON( "api/goal.js", function( data ) {
 
-      var size = 4;
+      var size = 2;
       var start = Date.now();
       var board = initializeBoard(size, data.goal_items);
       var elapsedTime = getElapsedTime(start);
@@ -78,8 +78,6 @@
             }, 1000);
           }
         }
-        /*console.log(elapsedTime.total, gameState.flipCounter, gameState.matches, calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));*/
-        // $("#score").text("Score: "+calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));
       });
     });
 
@@ -98,27 +96,26 @@
         url: "/score",
         data: JSON.stringify({
           username: Math.random().toString(36).substr(2, 5),
-          score: calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches)
+          totalTime: elapsedTime.total,
+          totalFlips: gameState.flipCounter,
+          finalScore: calculateScore(elapsedTime.total, gameState.flipCounter)
         }),
         contentType: "application/json",
         success: function(msg) {
-          $("#leaderboard").text(JSON.stringify(msg));
+          $("#leaderboard").text("Final score:"+JSON.stringify(msg));
         }
       });
     };
 
     function updateCurrentScore(start, gameState){
       var updateLoop = setInterval(function(){
-        // console.log('test')
         if (gameState.finished){
-          console.log('finished');
           updateLeaderboard(elapsedTime, gameState);
           return clearInterval(updateLoop);
         }
-        console.log(gameState);
         elapsedTime = getElapsedTime(start);
         $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
-        $("#score").text("Score: "+calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));
+        $("#score").text("Current score: "+calculateScore(elapsedTime.total, gameState.flipCounter));
       }, 1000);
     };
 

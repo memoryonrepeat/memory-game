@@ -82,10 +82,9 @@ function getElapsedTime(start){
   	};	
 };
 
-function calculateScore(time, flips, matches){
+function calculateScore(time, flips){
 	var baseScore = 10000;
 	var flipPenalty = 30;
 	var timePenalty = 10;
-	var matchReward = 200;
-	return baseScore - flips*flipPenalty - time*timePenalty + matches*matchReward;
+	return baseScore - flips*flipPenalty - time*timePenalty;
 };
