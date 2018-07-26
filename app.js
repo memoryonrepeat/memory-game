@@ -6,8 +6,9 @@ const db = lowdb(new FileSync('db.json'));
 const bodyParser = require('body-parser');
 
 // Set some defaults (required if your JSON file is empty)
-db.defaults({score: 0})
-  .write()
+db.defaults({
+	leaderboard: {}
+}).write()
 
 /*// Add a post
 db.get('posts')
@@ -29,9 +30,9 @@ app.use(bodyParser.json());
 // app.get('/', (req, res) => res.send('hello world'));
 
 app.post('/score', function (req, res) {
-	console.log(req.body);
-	db.set('score', req.body.score).write();
-	res.json(req.body.score);
+	console.log('node',req.body);
+	db.set('leaderboard.'+req.body.username, req.body.score).write();
+	res.json(req.body);
 });
 
 app.get('/leaderboard', function (req, res) {

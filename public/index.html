@@ -34,7 +34,7 @@
       var size = 4;
       var start = Date.now();
       var board = initializeBoard(size, data.goal_items);
-      var elapsedTime = {};
+      var elapsedTime = getElapsedTime(start);
       var gameState = {
         flipCounter: 0,
         matches: 0,
@@ -78,7 +78,8 @@
             }, 1000);
           }
         }
-        $("#score").text("Score: "+calculateScore(elapsedTime.total, flipCounter, matches));
+        /*console.log(elapsedTime.total, gameState.flipCounter, gameState.matches, calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));*/
+        // $("#score").text("Score: "+calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));
       });
     });
 
@@ -91,16 +92,17 @@
       };
     };
 
-    function updateLeaderboard(elapsedTime, flipCounter, matches){
+    function updateLeaderboard(elapsedTime, gameState){
       $.ajax({
         method: "POST",
         url: "/score",
-        data: JSON.stringify({ 
-          score: calculateScore(elapsedTime.total, flipCounter, matches)
+        data: JSON.stringify({
+          username: Math.random().toString(36).substr(2, 5),
+          score: calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches)
         }),
         contentType: "application/json",
         success: function(msg) {
-          $("#leaderboard").text(msg);
+          $("#leaderboard").text(JSON.stringify(msg));
         }
       });
     };
@@ -109,14 +111,14 @@
       var updateLoop = setInterval(function(){
         // console.log('test')
         if (gameState.finished){
-          console.log('wrong')
+          console.log('finished');
+          updateLeaderboard(elapsedTime, gameState);
           return clearInterval(updateLoop);
         }
         console.log(gameState);
         elapsedTime = getElapsedTime(start);
         $("#timer").text("Time elapsed: "+elapsedTime.hours+" hours, "+elapsedTime.mins+" minutes, "+elapsedTime.secs+" seconds");
-        updateLeaderboard(elapsedTime, gameState.flipCounter, gameState.matches);
-        // $("#score").text("Score: "+calculateScore(elapsedTime.total, flipCounter, matches));
+        $("#score").text("Score: "+calculateScore(elapsedTime.total, gameState.flipCounter, gameState.matches));
       }, 1000);
     };
 
