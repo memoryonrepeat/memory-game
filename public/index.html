@@ -49,7 +49,6 @@
 
       $(".square").on('click',function(){
         gameState.flipCounter += 1;
-        $("#flipCounter").text(gameState.flipCounter);
         if (!this.matched){
           currentlyFlipped.push(this);
         }
@@ -84,25 +83,26 @@
     function renderBoard(board){
       for (var key in board){
         if (key != 'size'){
-          var square = '<li class="square" id='+board[key][1][0]+' data-language='+board[key][1][1]+'><div class="front">'+board[key][1][0]+'</div><div class="back">'+board[key][0].text+'</div></li>';
+          var square = '<li class="square" id='+board[key][1][0]+' data-language='+board[key][1][1]+'><div class="front"><image src="/images/owl.svg"></div><div class="back">'+board[key][0].text+'</div></li>';
           $(".board").append(square);
         }
       };
     };
 
     function updateLeaderboard(elapsedTime, gameState){
+      var username = prompt('Please enter your name');
       $.ajax({
         method: "POST",
         url: "/score",
         data: JSON.stringify({
-          username: Math.random().toString(36).substr(2, 5),
+          username: username,
           totalTime: elapsedTime.total,
           totalFlips: gameState.flipCounter,
           finalScore: calculateScore(elapsedTime.total, gameState.flipCounter)
         }),
         contentType: "application/json",
         success: function(msg) {
-          $("#leaderboard").text("Final score:"+JSON.stringify(msg));
+          $("#leaderboard").text("Final score: "+JSON.stringify(msg));
         }
       });
     };
